@@ -53,7 +53,7 @@ Client.on("ready", () => {
 });
 
 /* Login */
-Client.login(settings.key);
+Client.login(settings.key); //Discord: lewis#8996
 
 /* ------------------------------------------------------------------------------ */
 /* Commands in Main File */
