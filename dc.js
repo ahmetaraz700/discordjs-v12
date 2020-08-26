@@ -1,17 +1,17 @@
 /* Identification */
 const Discord = require('discord.js');
-const Client = new Discord.Client();
-const settings = require('./settings.json');
+const client = new Discord.Client();
+const ayarlar = require('./ayarlar.json');
 const fs = require('fs');
 const data = require('quick.db');
 const express = require('express');
 const app = express();
 
-let prefix = settings.prefix;
+let prefix = ayarlar.prefix;
 
 /* Listens */
 app.get("/", (req, res) => {
-  res.send("I Logged!");
+  res.send("Giriş yapıldı!");
 });
 
 /* Event Loader */
@@ -21,43 +21,43 @@ fs.readdir("./events/", (err, files) => {
     const event = require(`./events/${file}`);
     let eventName = file.split(".")[0];
     console.log(`${eventName} is loaded for events.`);
-    Client.on(eventName, event.bind(null, Client));
+    client.on(eventName, event.bind(null, client));
   });
 });
 
 /* Commands Loader */
-Client.commands = new Discord.Collection();
-Client.aliases = new Discord.Collection();
+client.commands = new Discord.Collection();
+client.aliases = new Discord.Collection();
 
-fs.readdir("./commands/", (err, files) => {
+fs.readdir("./komutlar/", (err, files) => {
   if (err) return console.error(err);
   files.forEach((file) => {
     if (!file.endsWith(".js")) return;
-    let cmd = require(`./commands/${file}`);
+    let cmd = require(`./komutlar/${file}`);
     let cmdFileName = file.split(".")[0];
-    Client.commands.set(cmd.help.name, cmd);
+    client.commands.set(cmd.help.name, cmd);
     console.log(`${cmdFileName} is loaded.`);
     if (cmd.help.aliases) {
       cmd.help.aliases.forEach(alias => {
-        Client.aliases.set(alias, cmd.help.name);
+        client.aliases.set(alias, cmd.help.name);
       });
     };
   });
 });
 
 /* Ready */
-Client.on("ready", () => {
-  console.log(`${Client.user.tag} is online.`);
-  Client.user.setActivity(`${prefix}help`);
-  Client.user.setStatus(`idle`)
+client.on("ready", () => {
+  console.log(`${Client.user.tag} aktif.`);
+  client.user.setActivity(`${prefix}yardım`);
+  client.user.setStatus(`idle`)
 });
 
 /* Login */
-Client.login(settings.key); //Discord: lewis#8996
+client.login(ayarlar.token);
 
 /* ------------------------------------------------------------------------------ */
 /* Commands in Main File */
-Client.on("message", message => {
+client.on("message", message => {
   if (message.content.toLowerCase() === 'hi') return message.reply(`${message.author.username} Hi!`)
 });
 
