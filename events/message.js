@@ -1,8 +1,8 @@
-const settings = require('../settings.json');
+const settings = require('../ayarlar.json');
 
 module.exports = (client, message) => {
   
-  let prefix = settings.prefix;
+  let prefix = ayarlar.prefix;
   let msg = message.content.split(/\s+/g);
   let args = msg.slice(1);
   let command = msg[0];
